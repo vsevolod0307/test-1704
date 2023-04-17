@@ -91,10 +91,12 @@
         >
       </li>
     </ul>
+    {{ users }}
   </div>
 </template>
 
 <script lang="ts">
+import store from "@/store";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -102,6 +104,14 @@ export default defineComponent({
   props: {
     msg: String,
   },
+  computed: {
+    users() {
+      return store.getters.getUsers;
+    } 
+  },
+  mounted() {
+    store.dispatch("loadUsers", "https://jsonplaceholder.typicode.com/users");
+  }
 });
 </script>
 
