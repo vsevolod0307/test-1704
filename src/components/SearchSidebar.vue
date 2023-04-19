@@ -1,7 +1,7 @@
 <template>
   <aside>
     <input class="search-input" type="text" placeholder="поиск по имени" v-model="term">
-    <ul v-if="users" class="users">
+    <ul v-if="users?.length" class="users">
       <li class="user-sidebar" v-for="user, key in users" :key="key">
         <div class="detail-info">
           <span v-if="user.name">{{ user.name }}</span>
@@ -17,6 +17,7 @@
         </div>
       </li>
     </ul>
+    <div v-else class="prompt">Начните вводить имя или фамилию</div>
   </aside>
 
 </template>
@@ -40,11 +41,9 @@ export default defineComponent({
   watch: {
     term(value) {
       store.commit("getTerm", value);
+      store.dispatch("loadUsers", "https://jsonplaceholder.typicode.com/users");
     }
-  }, 
-  mounted() {
-    store.dispatch("loadUsers", "https://jsonplaceholder.typicode.com/users");
-  },
+  }
 });
 </script>
 
@@ -52,7 +51,6 @@ export default defineComponent({
   .user-sidebar {
     min-height: 100px;
     font-size: 14px;
-    width: 300px;
     background-color: rgb(245, 216, 173);
     display: flex;
     flex-direction: column;
@@ -68,13 +66,20 @@ export default defineComponent({
   .users {
     list-style-type: none;
     padding: 0;
+    min-width: 300px;
   }
 
   .search-input {
-    width: 100%;
+    min-width: 300px;
     padding: 10px;
     outline: none;
     border: none;
     box-shadow: 0px 0px 5px 0px rosybrown;
+  }
+
+  .prompt {
+    font-size: 12px;
+    color: #bdaeae;
+    margin-top: 24px;
   }
 </style>

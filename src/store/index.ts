@@ -30,11 +30,11 @@ export default createStore({
     term: ""
   },
   getters: {
-    getUsers(state): [] | undefined {
-      if(state.users) {
-        return state.users.filter(item => {
-          return item.name.toLowerCase().includes(state.term)
-        }) as []
+    getUsers(state): User[] | undefined {
+      if(state.term) {
+        return state.users.filter(item => item.name.toLowerCase().includes(state.term)) as []
+      } else {
+        state.users = [];
       }
     },
   },
