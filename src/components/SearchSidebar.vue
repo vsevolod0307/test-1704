@@ -2,7 +2,12 @@
   <aside>
     <input class="search-input" type="text" placeholder="поиск по имени" v-model="term">
     <ul v-if="users?.length" class="users">
-      <li class="user-sidebar" v-for="user, key in users" :key="key">
+      <li 
+        class="user-sidebar" 
+        :class="{ 'active-user' : user.id === activeUser }"
+        v-for="user in users" 
+        @click="getUser(user)"
+        :key="user.id">
         <div class="detail-info">
           <span v-if="user.name">{{ user.name }}</span>
         </div>
@@ -25,21 +30,29 @@
 <script lang="ts">
 import store from "@/store";
 import { defineComponent } from "vue";
+import { User } from "@/types/main";
 
 export default defineComponent({
   name: "SearchSidebar",
   data() {
     return {
-      term: ""
+      term: "",
+      activeUser: 0
+    }
+  },
+  methods: {
+    getUser(user: User): void {
+      this.activeUser = user.id;
+      store.commit("getUser", user);
     }
   },
   computed: {
-    users() {
+    users(): User[] {
       return store.getters.getUsers;
     },
   },
   watch: {
-    term(value) {
+    term(value): void {
       store.commit("getTerm", value);
       store.dispatch("loadUsers", "https://jsonplaceholder.typicode.com/users");
     }
@@ -62,6 +75,9 @@ export default defineComponent({
     &:hover {
       background-color: rgb(226, 185, 124);
     }
+  }
+  .active-user {
+    background-color: rgb(226, 185, 124);
   }
   .users {
     list-style-type: none;

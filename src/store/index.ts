@@ -1,32 +1,10 @@
 import { createStore } from "vuex";
-
-interface Address {
-  street: string,
-  suite: string,
-  city: string,
-  zipcode: string,
-  geo: {
-    lat: string,
-    lng: string
-  }
-}
-interface User {
-  id: number, 
-  name: string,
-  email: string,
-  address: Address,
-  phone: string,
-  website: string,
-  company: {
-    name: string,
-    catchPhrase: string,
-    bs: string
-  }
-}
+import { User } from "@/types/main";
 
 export default createStore({
   state: {
     users: [] as User[],
+    user: {} as User,
     term: ""
   },
   getters: {
@@ -44,6 +22,9 @@ export default createStore({
     },
     getTerm(state, term) {
       state.term = term;
+    },
+    getUser(state, user) {
+      state.user = user;
     }
   },
   actions: {
